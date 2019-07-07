@@ -1,0 +1,72 @@
+{
+  "name": "yarn-ui",
+  "displayName": "yarn-ui",
+  "description": "yarn-ui for vscode",
+  "version": "0.0.1",
+  "publisher": "xqchen",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chencn/yarn-ui"
+  },
+  "engines": {
+    "vscode": "^1.36.0"
+  },
+  "keywords": [
+    "npm",
+    "yarn",
+    "plugin",
+    "yarn ui",
+    "yarnui"
+  ],
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "workspaceContains:package.json"
+  ],
+  "main": "./src/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.yarnUi",
+        "title": "Yarn-ui"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "yarn-ui-view",
+          "title": "Package Manager",
+          "icon": "resources/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "yarn-ui-view": [
+        {
+          "id": "yarn-ui-scripts",
+          "name": "Scripts"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "test": "node ./test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.1",
+    "@types/mocha": "^5.2.6",
+    "@types/node": "^10.12.21",
+    "@types/vscode": "^1.36.0",
+    "eslint": "^5.13.0",
+    "glob": "^7.1.4",
+    "mocha": "^6.1.4",
+    "typescript": "^3.3.1",
+    "vscode-test": "^1.0.0-next.0"
+  },
+  "dependencies": {
+    "@types/lodash.capitalize": "^4.2.6",
+    "@types/read-pkg-up": "^3.0.1",
+    "lodash.capitalize": "^4.2.1"
+  }
+}
