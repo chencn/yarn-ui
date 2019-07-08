@@ -2,8 +2,9 @@
   "name": "yarn-ui",
   "displayName": "yarn-ui",
   "description": "yarn-ui for vscode",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "xqchen",
+  "icon": "resources/yarn-ui.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/chencn/yarn-ui"
@@ -36,7 +37,7 @@
       "activitybar": [
         {
           "id": "yarn-ui-view",
-          "title": "Package Manager",
+          "title": "Yarn",
           "icon": "resources/icon.svg"
         }
       ]
@@ -48,6 +49,25 @@
           "name": "Scripts"
         }
       ]
+    },
+    "configuration": {
+      "type": "object",
+      "title": "yarn-ui setting",
+      "properties": {
+        "yarn-ui.setting.choose-yarn-or-npm": {
+          "type": "string",
+          "default": "yarn",
+          "enum": [
+            "yarn",
+            "npm"
+          ],
+          "enumDescriptions": [
+            "choose yarn",
+            "choose npm"
+          ],
+          "description": "choose yarn or npm"
+        }
+      }
     }
   },
   "scripts": {
@@ -66,7 +86,6 @@
   },
   "dependencies": {
     "@types/lodash.capitalize": "^4.2.6",
-    "@types/read-pkg-up": "^3.0.1",
     "lodash.capitalize": "^4.2.1"
   }
 }
