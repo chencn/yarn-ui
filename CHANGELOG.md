@@ -1,4 +1,6 @@
 # Change Log
+v0.0.3
+更新lodash 修复漏洞
 
 v0.0.2
 - 增加切换npm和yarn的默认设置
