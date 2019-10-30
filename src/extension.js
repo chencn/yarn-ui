@@ -20,7 +20,7 @@ class ScriptsProvider {
 
             const rootPath = vscode.workspace.rootPath;
 
-            const scripts = require(rootPath + "\\package.json").scripts;
+            const scripts = require(rootPath + "/package.json").scripts;
             let result = vscode.workspace.getConfiguration().get('yarn-ui.setting.choose-yarn-or-npm') == 'yarn' ? 'yarn' : 'npm run';
             return Promise.resolve(Object.keys(scripts || {}).map((scriptName) => new Script(capitalize(scriptName), vscode.TreeItemCollapsibleState.None, {
                 "title": "<unused>",
