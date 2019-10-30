@@ -1,4 +1,10 @@
 # Change Log
+v0.0.5
+Support multiple workspace folders.
+
+v0.0.4
+Fixed issue #2 where path to package.json was invalid on linux/mac.
+
 v0.0.3
 更新lodash 修复漏洞
 

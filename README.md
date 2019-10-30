@@ -1,4 +1,10 @@
 # yarn-ui
+
+Fork of [chencn/yarn-ui](https://github.com/chencn/yarn-ui).
+
+Edited to play well with workspace containing multiple projects.
+
+
 一个类似webstrom中通过图形化来启动npm的工具,此工具执行的是yarn命令
 
 A tool similar to webstrom that starts npm via ui, here is the yarn command
