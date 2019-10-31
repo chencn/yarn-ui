@@ -1,4 +1,7 @@
 # Change Log
+v0.0.7
+Properly exclude unnecessary files (since required assets are bundled with webpack).
+
 v0.0.6
 Bundled with webpack.
 
