@@ -3,11 +3,13 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { capitalize } from 'lodash';
 
+const iconSvg = require('../resources/icon.svg');
+
 class YarnProvider implements vscode.TreeDataProvider<Project | Script> {
     private _onDidChangeTreeData: vscode.EventEmitter<Project | Script | undefined> = new vscode.EventEmitter<Project | Script | undefined>();
 	readonly onDidChangeTreeData: vscode.Event<Project | Script | undefined> = this._onDidChangeTreeData.event;
 
-	constructor() {
+	constructor(private readonly ctx: vscode.ExtensionContext) {
         console.log("Yarn UI provider initialized.");
      }
 
@@ -52,23 +54,19 @@ class YarnProvider implements vscode.TreeDataProvider<Project | Script> {
         const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
         const scripts = packageJson.scripts;
         let command = vscode.workspace.getConfiguration().get('yarn-ui.setting.choose-yarn-or-npm') == 'yarn' ? 'yarn' : 'npm run';
-        return Object.keys(scripts || {}).map((scriptName) => new Script(capitalize(scriptName), vscode.TreeItemCollapsibleState.None, {
+        return Object.keys(scripts || {}).map((scriptName) => new Script(this.ctx, capitalize(scriptName), vscode.TreeItemCollapsibleState.None, {
             "title": "<unused>",
             "command": "extension.runCommand",
             "arguments": scripts ? [`${command} ${scriptName}`] : [""]
         }));
-        
     }
 }
 
 class Script extends vscode.TreeItem {
-    constructor(label: string, collapsibleState: vscode.TreeItemCollapsibleState, commandToRun: vscode.Command) {
+    constructor(ctx: vscode.ExtensionContext, label: string, collapsibleState: vscode.TreeItemCollapsibleState, commandToRun: vscode.Command) {
         super(label, collapsibleState);
         this.command = commandToRun;
-        this.iconPath = {
-            light: path.join(__filename, '..', '..', 'resources', 'icon.svg'),
-            dark: path.join(__filename, '..', '..', 'resources', 'icon.svg')
-        };
+        this.iconPath = ctx.asAbsolutePath(iconSvg);
         this.contextValue = 'script';
     }
 }
@@ -113,7 +111,7 @@ function runInTerminal(command: any) {
  * @param {vscode.ExtensionContext} context
  */
 function activate(context: vscode.ExtensionContext) {
-    context.subscriptions.push(vscode.window.registerTreeDataProvider("yarn-ui-scripts", new YarnProvider()));
+    context.subscriptions.push(vscode.window.registerTreeDataProvider("yarn-ui-scripts", new YarnProvider(context)));
     context.subscriptions.push(vscode.commands.registerCommand('extension.runCommand', (command) => {
         runInTerminal(command);
     }));

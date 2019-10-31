@@ -1,4 +1,7 @@
 # Change Log
+v0.0.6
+Bundled with webpack.
+
 v0.0.5
 Support multiple workspace folders.
 
