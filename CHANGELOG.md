@@ -1,4 +1,7 @@
 # Change Log
+v0.0.8
+Fixed extension packaging issue introduced by 0.0.7.
+
 v0.0.7
 Properly exclude unnecessary files (since required assets are bundled with webpack).
 
