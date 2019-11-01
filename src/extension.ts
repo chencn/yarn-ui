@@ -9,9 +9,7 @@ class YarnProvider implements vscode.TreeDataProvider<Project | Script> {
     private _onDidChangeTreeData: vscode.EventEmitter<Project | Script | undefined> = new vscode.EventEmitter<Project | Script | undefined>();
 	readonly onDidChangeTreeData: vscode.Event<Project | Script | undefined> = this._onDidChangeTreeData.event;
 
-	constructor(private readonly ctx: vscode.ExtensionContext) {
-        console.log("Yarn UI provider initialized.");
-     }
+	constructor(private readonly ctx: vscode.ExtensionContext) { }
 
 	refresh(): void {
 		this._onDidChangeTreeData.fire();
@@ -45,9 +43,19 @@ class YarnProvider implements vscode.TreeDataProvider<Project | Script> {
             vscode.window.showInformationMessage('Workspace has no folder containing package.json');
             return [new vscode.TreeItem('No workspace folder contain a package.json.', vscode.TreeItemCollapsibleState.None)];
         }
-        return projects
+        const projs = projects
             .map(project => new Project(project))
             .filter(project => !!project.packagePath);
+
+        const packagesJsonPaths = projs.map(project => project.packagePath);
+
+        this.ctx.subscriptions.push(vscode.workspace.onDidSaveTextDocument(e => {
+            if (packagesJsonPaths.includes(e.fileName)) {
+                this.refresh();
+            }
+        }));
+
+        return projs;
     }
 
     private getScripts(packageJsonPath: string): Script[] {
@@ -74,7 +82,9 @@ class Script extends vscode.TreeItem {
 class Project extends vscode.TreeItem {
     public readonly packagePath?: string;
 
-    constructor(workspaceFolder: vscode.WorkspaceFolder) {
+    constructor(
+        workspaceFolder: vscode.WorkspaceFolder,
+    ) {
         super(workspaceFolder.name, vscode.TreeItemCollapsibleState.Expanded);
         super.iconPath = vscode.ThemeIcon.Folder;
         this.contextValue = 'project';

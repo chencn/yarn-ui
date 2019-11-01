@@ -2,7 +2,7 @@
   "name": "yarn-ui",
   "displayName": "yarn-ui",
   "description": "yarn-ui for vscode",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "publisher": "kazelone",
   "author": "xqchen",
   "icon": "resources/yarn-ui.png",

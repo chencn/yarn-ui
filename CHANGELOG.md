@@ -1,4 +1,7 @@
 # Change Log
+v0.0.9
+Trigger refresh when a package.json file is edited.
+
 v0.0.8
 Fixed extension packaging issue introduced by 0.0.7.
 
