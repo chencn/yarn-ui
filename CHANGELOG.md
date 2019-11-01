@@ -1,4 +1,7 @@
 # Change Log
+v0.1.1
+Re-use terminal per-project.
+
 v0.1.0
 Fixed a bug where the terminal working directory would not be properly set to the directory of the corresponding package.json.
 
