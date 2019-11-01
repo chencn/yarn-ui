@@ -1,6 +1,6 @@
 # yarn-ui
 
-Fork of [chencn/yarn-ui](https://github.com/chencn/yarn-ui).
+Thanks to the code contributed by [kazelone](https://github.com/kazelone/yarn-ui)
 
 Edited to play well with workspace containing multiple projects (multi-root workspaces) and refresh on package.json changes.
 
