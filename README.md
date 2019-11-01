@@ -1,5 +1,9 @@
 # yarn-ui
 
+[![Version](https://vsmarketplacebadge.apphb.com/version-short/kazelone.yarn-ui.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=zRnatoNeto.dark-green)
+[![Installs](https://vsmarketplacebadge.apphb.com/installs-short/kazelone.yarn-ui.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=zRnatoNeto.dark-green)
+[![Ratings](https://vsmarketplacebadge.apphb.com/rating-short/kazelone.yarn-ui.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=zRnatoNeto.dark-green)
+
 Fork of [chencn/yarn-ui](https://github.com/chencn/yarn-ui).
 
 Edited to play well with workspace containing multiple projects (multi-root workspaces) and refresh on package.json changes.
