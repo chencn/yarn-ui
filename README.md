@@ -1,8 +1,8 @@
 # yarn-ui
 
-[![Version](https://vsmarketplacebadge.apphb.com/version-short/kazelone.yarn-ui.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=zRnatoNeto.dark-green)
-[![Installs](https://vsmarketplacebadge.apphb.com/installs-short/kazelone.yarn-ui.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=zRnatoNeto.dark-green)
-[![Ratings](https://vsmarketplacebadge.apphb.com/rating-short/kazelone.yarn-ui.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=zRnatoNeto.dark-green)
+[![Version](https://vsmarketplacebadge.apphb.com/version-short/kazelone.yarn-ui.svg)](https://marketplace.visualstudio.com/items?itemName=kazelone.yarn-ui)
+[![Installs](https://vsmarketplacebadge.apphb.com/installs-short/kazelone.yarn-ui.svg)](https://marketplace.visualstudio.com/items?itemName=kazelone.yarn-ui)
+[![Ratings](https://vsmarketplacebadge.apphb.com/rating-short/kazelone.yarn-ui.svg)](https://marketplace.visualstudio.com/items?itemName=kazelone.yarn-ui)
 
 Fork of [chencn/yarn-ui](https://github.com/chencn/yarn-ui).
 
