@@ -27,3 +27,6 @@ Thumbs.db
 /target
 node_modules
 /*.vsix
+
+out
+/.vscode

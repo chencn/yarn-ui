@@ -1,4 +1,24 @@
 # Change Log
+Thanks to the code contributed by [kazelone](https://github.com/kazelone/yarn-ui)
+
+v0.0.9
+Trigger refresh when a package.json file is edited.
+
+v0.0.8
+Fixed extension packaging issue introduced by 0.0.7.
+
+v0.0.7
+Properly exclude unnecessary files (since required assets are bundled with webpack).
+
+v0.0.6
+Bundled with webpack.
+
+v0.0.5
+Support multiple workspace folders.
+
+v0.0.4
+Fixed issue #2 where path to package.json was invalid on linux/mac.
+
 v0.0.3
 更新lodash 修复漏洞
 
