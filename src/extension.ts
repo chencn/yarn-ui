@@ -28,7 +28,7 @@ class YarnProvider implements vscode.TreeDataProvider<Project | Script> {
             if (element.contextValue === 'project') {
                 const proj = element as Project;
                 if (proj.packagePath) {
-                    return Promise.resolve(this.getScripts(proj.packagePath));
+                    return Promise.resolve(this.getScripts(proj.packagePath, proj.label));
                 }
                 return Promise.resolve([]);
             }
@@ -58,14 +58,25 @@ class YarnProvider implements vscode.TreeDataProvider<Project | Script> {
         return projs;
     }
 
-    private getScripts(packageJsonPath: string): Script[] {
+    private getScripts(packageJsonPath: string, projectName?: string): Script[] {
         const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
+        const projectPath = path.dirname(packageJsonPath);
         const scripts = packageJson.scripts;
+        if (!scripts) {
+            return [];
+        }
         let command = vscode.workspace.getConfiguration().get('yarn-ui.setting.choose-yarn-or-npm') == 'yarn' ? 'yarn' : 'npm run';
-        return Object.keys(scripts || {}).map((scriptName) => new Script(this.ctx, capitalize(scriptName), vscode.TreeItemCollapsibleState.None, {
-            "title": "<unused>",
+        return Object.keys(scripts).map(scriptName => new Script(this.ctx, capitalize(scriptName), vscode.TreeItemCollapsibleState.None, {
+            "title": scriptName,
             "command": "extension.runCommand",
-            "arguments": scripts ? [`${command} ${scriptName}`] : [""]
+            "arguments": [
+                {
+                    command: `${command} ${scriptName}`,
+                    cwd: projectPath,
+                    scriptName,
+                    projectName
+                } as RunInTerminalOptions
+            ]
         }));
     }
 }
@@ -104,9 +115,21 @@ class Project extends vscode.TreeItem {
 	}
 }
 
-function runInTerminal(command: any) {
+interface RunInTerminalOptions {
+    command: string,
+    cwd?: string,
+    scriptName?: string,
+    projectName?: string
+}
+
+function runInTerminal({ command, cwd, scriptName, projectName }: RunInTerminalOptions) {
+    scriptName = scriptName ? ` - ${scriptName}` : '';
+    projectName = projectName ? ` - ${projectName}` : '';
     try {
-        const terminal = vscode.window.createTerminal("yarn_ui");
+        const terminal = vscode.window.createTerminal({
+            name: `Yarn UI${projectName}${scriptName}`,
+            cwd
+        });
         terminal.show();
         terminal.sendText(command);
     }
@@ -122,7 +145,7 @@ function runInTerminal(command: any) {
  */
 function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.window.registerTreeDataProvider("yarn-ui-scripts", new YarnProvider(context)));
-    context.subscriptions.push(vscode.commands.registerCommand('extension.runCommand', (command) => {
+    context.subscriptions.push(vscode.commands.registerCommand('extension.runCommand', (command: RunInTerminalOptions) => {
         runInTerminal(command);
     }));
 }
