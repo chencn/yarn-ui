@@ -1,10 +1,10 @@
 # yarn-ui
 
-[![Version](https://vsmarketplacebadge.apphb.com/version-short/kazelone.yarn-ui.svg)](https://marketplace.visualstudio.com/items?itemName=kazelone.yarn-ui)
-[![Installs](https://vsmarketplacebadge.apphb.com/installs-short/kazelone.yarn-ui.svg)](https://marketplace.visualstudio.com/items?itemName=kazelone.yarn-ui)
-[![Ratings](https://vsmarketplacebadge.apphb.com/rating-short/kazelone.yarn-ui.svg)](https://marketplace.visualstudio.com/items?itemName=kazelone.yarn-ui)
+[![Version](https://vsmarketplacebadge.apphb.com/version-short/xqchen.yarn-ui.svg)](https://marketplace.visualstudio.com/items?itemName=xqchen.yarn-ui)
+[![Installs](https://vsmarketplacebadge.apphb.com/installs-short/xqchen.yarn-ui.svg)](https://marketplace.visualstudio.com/items?itemName=xqchen.yarn-ui)
+[![Ratings](https://vsmarketplacebadge.apphb.com/rating-short/xqchen.yarn-ui.svg)](https://marketplace.visualstudio.com/items?itemName=xqchen.yarn-ui)
 
-Fork of [chencn/yarn-ui](https://github.com/chencn/yarn-ui).
+Thanks to the code contributed by [kazelone](https://github.com/kazelone/yarn-ui)
 
 Edited to play well with workspace containing multiple projects (multi-root workspaces) and refresh on package.json changes.
 

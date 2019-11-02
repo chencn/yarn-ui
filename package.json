@@ -3,8 +3,8 @@
   "displayName": "yarn-ui",
   "description": "yarn-ui for vscode",
   "version": "0.1.1",
-  "publisher": "kazelone",
-  "author": "xqchen",
+  "publisher": "xqchen",
+  "author": "xqchen,kazelone",
   "icon": "resources/yarn-ui.png",
   "repository": {
     "type": "git",

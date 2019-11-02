@@ -1,4 +1,7 @@
 # Change Log
+
+Thanks to the code contributed by [kazelone](https://github.com/kazelone/yarn-ui)
+
 v0.1.1
 Re-use terminal per-project.
 
