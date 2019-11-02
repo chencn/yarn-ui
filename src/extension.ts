@@ -44,7 +44,7 @@ class YarnProvider implements vscode.TreeDataProvider<Project | Script> {
             return [new vscode.TreeItem('No workspace folder contain a package.json.', vscode.TreeItemCollapsibleState.None)];
         }
         const projs = projects
-            .map(project => new Project(project))
+            .map(project => new Project(this.ctx, project))
             .filter(project => !!project.packagePath);
 
         const packagesJsonPaths = projs.map(project => project.packagePath);
@@ -71,7 +71,6 @@ class YarnProvider implements vscode.TreeDataProvider<Project | Script> {
             "command": "extension.runCommand",
             "arguments": [
                 {
-                    terminal: project.terminal,
                     command: `${command} ${scriptName}`,
                     project
                 } as RunInTerminalOptions
@@ -92,9 +91,10 @@ class Script extends vscode.TreeItem {
 class Project extends vscode.TreeItem {
     public readonly packagePath?: string;
     private _terminal?: vscode.Terminal = undefined;
-    public terminalReuseMessageShown: boolean = false;
+    private terminalReuseMessageShown: boolean = false;
 
     constructor(
+        private ctx: vscode.ExtensionContext,
         workspaceFolder: vscode.WorkspaceFolder,
     ) {
         super(workspaceFolder.name, vscode.TreeItemCollapsibleState.Expanded);
@@ -115,7 +115,7 @@ class Project extends vscode.TreeItem {
 		return true;
     }
     
-    public get terminal() {
+    private get terminal() {
         if (!this.packagePath) {
             throw new Error('Trying to launch a terminal for a project with no package.json');
         }
@@ -125,28 +125,37 @@ class Project extends vscode.TreeItem {
                 cwd: path.dirname(this.packagePath)
             });
         }
+        this.ctx.subscriptions.push(vscode.window.onDidCloseTerminal(t => {
+            if (t === this._terminal) {
+                this._terminal.dispose();
+                this._terminal = undefined;
+            }
+        }));
         return this._terminal;
+    }
+
+    public runInTerminal(command: string) {
+        try {
+            this.terminal.show();
+            this.terminal.sendText(command);
+            if (!this.terminalReuseMessageShown) {
+                this.terminal.sendText(`"This terminal will be re-used for yarn scripts of this project (${this.label})."`);
+                this.terminalReuseMessageShown = true;
+            }
+        }
+        catch (err) {
+            vscode.window.showErrorMessage(`Failed to run ${command}`);
+        }
     }
 }
 
 interface RunInTerminalOptions {
-    terminal: vscode.Terminal,
     command: string,
     project: Project
 }
 
-function runInTerminal({ terminal, command, project }: RunInTerminalOptions) {
-    try {
-        terminal.show();
-        terminal.sendText(command);
-        if (!project.terminalReuseMessageShown) {
-            terminal.sendText(`"This terminal will be re-used for yarn scripts of this project (${project.label})."`);
-            project.terminalReuseMessageShown = true;
-        }
-    }
-    catch (err) {
-        vscode.window.showErrorMessage(`Failed to run ${command}`);
-    }
+function runInTerminal({ command, project }: RunInTerminalOptions) {
+    project.runInTerminal(command);
 }
 
 // this method is called when your extension is activated

@@ -2,6 +2,9 @@
 
 Thanks to the code contributed by [kazelone](https://github.com/kazelone/yarn-ui)
 
+v0.1.2
+Now behave properly if the re-usable project terminal is closed.
+
 v0.1.1
 Re-use terminal per-project.
 
