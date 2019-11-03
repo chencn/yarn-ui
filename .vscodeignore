@@ -10,3 +10,7 @@ node_modules
 src/
 tsconfig.json
 webpack.config.js
+yarn.lock
+.prettierrc.yaml
+.editorconfig
+tslint.json
