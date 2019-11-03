@@ -1,5 +1,9 @@
 # yarn-ui
 
+[![Version](https://vsmarketplacebadge.apphb.com/version-short/xqchen.yarn-ui.svg)](https://marketplace.visualstudio.com/items?itemName=xqchen.yarn-ui)
+[![Installs](https://vsmarketplacebadge.apphb.com/installs-short/xqchen.yarn-ui.svg)](https://marketplace.visualstudio.com/items?itemName=xqchen.yarn-ui)
+[![Ratings](https://vsmarketplacebadge.apphb.com/rating-short/xqchen.yarn-ui.svg)](https://marketplace.visualstudio.com/items?itemName=xqchen.yarn-ui)
+
 Thanks to the code contributed by [kazelone](https://github.com/kazelone/yarn-ui)
 
 Edited to play well with workspace containing multiple projects (multi-root workspaces) and refresh on package.json changes.

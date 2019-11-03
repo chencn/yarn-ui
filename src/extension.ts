@@ -28,7 +28,7 @@ class YarnProvider implements vscode.TreeDataProvider<Project | Script> {
             if (element.contextValue === 'project') {
                 const proj = element as Project;
                 if (proj.packagePath) {
-                    return Promise.resolve(this.getScripts(proj.packagePath));
+                    return Promise.resolve(this.getScripts(proj));
                 }
                 return Promise.resolve([]);
             }
@@ -44,7 +44,7 @@ class YarnProvider implements vscode.TreeDataProvider<Project | Script> {
             return [new vscode.TreeItem('No workspace folder contain a package.json.', vscode.TreeItemCollapsibleState.None)];
         }
         const projs = projects
-            .map(project => new Project(project))
+            .map(project => new Project(this.ctx, project))
             .filter(project => !!project.packagePath);
 
         const packagesJsonPaths = projs.map(project => project.packagePath);
@@ -58,14 +58,23 @@ class YarnProvider implements vscode.TreeDataProvider<Project | Script> {
         return projs;
     }
 
-    private getScripts(packageJsonPath: string): Script[] {
-        const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
+    private getScripts(project: Project): Script[] {
+        if (!project.packagePath) { return []; }
+
+        const packageJson = JSON.parse(fs.readFileSync(project.packagePath, 'utf-8'));
         const scripts = packageJson.scripts;
+        if (!scripts) { return []; }
+
         let command = vscode.workspace.getConfiguration().get('yarn-ui.setting.choose-yarn-or-npm') == 'yarn' ? 'yarn' : 'npm run';
-        return Object.keys(scripts || {}).map((scriptName) => new Script(this.ctx, capitalize(scriptName), vscode.TreeItemCollapsibleState.None, {
-            "title": "<unused>",
+        return Object.keys(scripts).map(scriptName => new Script(this.ctx, capitalize(scriptName), vscode.TreeItemCollapsibleState.None, {
+            "title": scriptName,
             "command": "extension.runCommand",
-            "arguments": scripts ? [`${command} ${scriptName}`] : [""]
+            "arguments": [
+                {
+                    command: `${command} ${scriptName}`,
+                    project
+                } as RunInTerminalOptions
+            ]
         }));
     }
 }
@@ -81,8 +90,11 @@ class Script extends vscode.TreeItem {
 
 class Project extends vscode.TreeItem {
     public readonly packagePath?: string;
+    private _terminal?: vscode.Terminal = undefined;
+    private terminalReuseMessageShown: boolean = false;
 
     constructor(
+        private ctx: vscode.ExtensionContext,
         workspaceFolder: vscode.WorkspaceFolder,
     ) {
         super(workspaceFolder.name, vscode.TreeItemCollapsibleState.Expanded);
@@ -101,18 +113,49 @@ class Project extends vscode.TreeItem {
 		}
 
 		return true;
-	}
+    }
+    
+    private get terminal() {
+        if (!this.packagePath) {
+            throw new Error('Trying to launch a terminal for a project with no package.json');
+        }
+        if (typeof this._terminal === 'undefined') {
+            this._terminal = vscode.window.createTerminal({
+                name: `Yarn UI - ${this.label}`,
+                cwd: path.dirname(this.packagePath)
+            });
+        }
+        this.ctx.subscriptions.push(vscode.window.onDidCloseTerminal(t => {
+            if (t === this._terminal) {
+                this._terminal.dispose();
+                this._terminal = undefined;
+            }
+        }));
+        return this._terminal;
+    }
+
+    public runInTerminal(command: string) {
+        try {
+            this.terminal.show();
+            this.terminal.sendText(command);
+            if (!this.terminalReuseMessageShown) {
+                this.terminal.sendText(`"This terminal will be re-used for yarn scripts of this project (${this.label})."`);
+                this.terminalReuseMessageShown = true;
+            }
+        }
+        catch (err) {
+            vscode.window.showErrorMessage(`Failed to run ${command}`);
+        }
+    }
 }
 
-function runInTerminal(command: any) {
-    try {
-        const terminal = vscode.window.createTerminal("yarn_ui");
-        terminal.show();
-        terminal.sendText(command);
-    }
-    catch (err) {
-        vscode.window.showErrorMessage(`Failed to run ${command}`);
-    }
+interface RunInTerminalOptions {
+    command: string,
+    project: Project
+}
+
+function runInTerminal({ command, project }: RunInTerminalOptions) {
+    project.runInTerminal(command);
 }
 
 // this method is called when your extension is activated
@@ -122,7 +165,7 @@ function runInTerminal(command: any) {
  */
 function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.window.registerTreeDataProvider("yarn-ui-scripts", new YarnProvider(context)));
-    context.subscriptions.push(vscode.commands.registerCommand('extension.runCommand', (command) => {
+    context.subscriptions.push(vscode.commands.registerCommand('extension.runCommand', (command: RunInTerminalOptions) => {
         runInTerminal(command);
     }));
 }

@@ -1,5 +1,15 @@
 # Change Log
+
 Thanks to the code contributed by [kazelone](https://github.com/kazelone/yarn-ui)
+
+v0.1.2
+Now behave properly if the re-usable project terminal is closed.
+
+v0.1.1
+Re-use terminal per-project.
+
+v0.1.0
+Fixed a bug where the terminal working directory would not be properly set to the directory of the corresponding package.json.
 
 v0.0.9
 Trigger refresh when a package.json file is edited.
